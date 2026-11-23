@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "Weekly Groceries",
+    "amount": 64.2,
+    "category": "Food",
+    "date": "2026-10-02"
+  },
+  {
+    "id": "2",
+    "title": "Bus pass",
+    "amount": 45,
+    "category": "Transport",
+    "date": "2026-10-01"
+  },
+  {
+    "id": "3",
+    "title": "Rent",
+    "amount": 850,
+    "category": "Bills",
+    "date": "2026-10-01"
+  },
+  {
+    "id": "f2fc7d10-e788-4fe9-b1ec-8ba37c911bfc",
+    "title": "Coffee",
+    "amount": 4.5,
+    "category": "Food",
+    "date": "2026-11-22"
+  }
+]
