@@ -32,6 +32,7 @@ export default async function HomePage() {
               </div>
               <p className="expense-amount">{formatMoney(expense.amount)}</p>
               <div className="expense-actions">
+                <Link href={`/expenses/${expense.id}/edit`}>Edit</Link>
                 <DeleteButton id={expense.id} />
               </div>
             </li>

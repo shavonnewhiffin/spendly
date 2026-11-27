@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { CATEGORIES } from "../lib/categories"
 
-export default function ExpenseForm() {
+export default function ExpenseForm({ expense }) {
     const router = useRouter();
-    const [title, setTitle] = useState("");
-    const [amount, setAmount] = useState("");
-    const [category, setCategory] = useState(CATEGORIES[0]);
-    const [date, setDate] = useState(todayLocal());
+    const isEditing = Boolean(expense)
+
+    const [title, setTitle] = useState(expense?.title ?? "");
+    const [amount, setAmount] = useState(expense?.amount ?? "");
+    const [category, setCategory] = useState(expense?.category ?? CATEGORIES[0]);
+    const [date, setDate] = useState(expense?.date ?? todayLocal());
     const [error, setError] = useState("");
     const [saving, setSaving] = useState(false);
 
@@ -20,9 +22,11 @@ export default function ExpenseForm() {
         setError("");
         setSaving(true);
 
+        const url = isEditing ? `/api/expenses/${expense.id}` : "/api/expenses"
+
         try {
-            const response = await fetch("/api/expenses", {
-                method: "POST",
+            const response = await fetch (url, {
+                method: isEditing ? "PATCH" : "POST" ,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title, amount: Number(amount), category, date })
             });
@@ -76,7 +80,7 @@ export default function ExpenseForm() {
 
             <div className="form-actions">
             <button type="submit" className="button" disabled={saving}>
-                {saving ? "Saving…" : "Add Expense"}
+                {saving ? "Saving…" : isEditing ? "Save changes" : "Add expense"}
             </button>
             <Link href="/">Cancel</Link>
             </div>
