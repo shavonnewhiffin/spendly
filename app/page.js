@@ -1,13 +1,37 @@
-import { getExpenses } from "@/lib/expenses";
-import { formatMoney, sum } from "@/lib/helpers";
+import { getExpenses, getBudgets } from "@/lib/expenses";
+import { CATEGORIES } from '@/lib/categories'
+import { formatMoney, sum, getMonths, formatMonth } from "@/lib/helpers";
+import Filters from "@/components/Filters";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
+import BudgetBar from "@/components/BudgetBar";
 
 // Read expenses.json on every request so new expenses show up (otherwise the build caches this page)
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }) {
+  const filters = await searchParams
   const expenses = await getExpenses();
+  const budgets = await getBudgets();
+
+  if(expenses.length === 0){
+    return (
+      <main>
+        <h1>Expenses</h1>
+        <p className="muted">No expenses yet</p>
+        <Link href="/expenses/new" className="button">+ Add expense</Link>
+      </main>
+    )
+  }
+
+  const months = getMonths(expenses)
+  const month = filters.month ?? months[0];
+  const category = filters.category ?? "all";
+
+  const monthExpenses = expenses.filter((expense) => expense.date.startsWith(month))
+  const shownExpenses = category === "all"
+  ? monthExpenses 
+  : monthExpenses.filter((expense) => expense.category === category)
 
   return (
     <main>
@@ -16,13 +40,30 @@ export default async function HomePage() {
       <Link href="/expenses/new" className="button">+ Add expense</Link>
       </div>
 
+      <Filters months={months} month={month} category={category} />
+
+      <section className="card">
+        <h2>{formatMonth(month)} budgets</h2>
+        {CATEGORIES.map((name) => (
+          <BudgetBar 
+          key={name}
+          category={name}
+          spent={sum(monthExpenses.filter((expense) => expense.category === name))}
+          budget={budgets[name]}
+          />
+        ))}
+      </section>
+
       <section className="card">
         <div className="list-header">
-          <h2>All expenses</h2>
-          <p className="total">{formatMoney(sum(expenses))}</p>
+          <h2>{category === "all" ? "All expenses" : category}</h2>
+          <p className="total">{formatMoney(sum(shownExpenses))}</p>
         </div>
+        {shownExpenses.length === 0 && (
+          <p className="muted">No expenses match these filters.</p>
+        )}
         <ul className="expense-list">
-          {expenses.map((expense) => (
+          {shownExpenses.map((expense) => (
             <li key={expense.id} className="expense">
               <div className="">
                 <p className="expense-title">{expense.title}</p>
