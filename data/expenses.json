@@ -1,10 +1,17 @@
 [
   {
     "id": "f44a79e0-51be-4e5e-8749-69a57b733e1b",
-    "title": "Video Game",
+    "title": "GTA 6",
     "amount": 60,
     "category": "Fun",
     "date": "2026-11-26"
+  },
+  {
+    "id": "c773b919-7b9f-44e8-a592-f90a551cddc7",
+    "title": "Concert",
+    "amount": 602.9,
+    "category": "Fun",
+    "date": "2026-10-29"
   },
   {
     "id": "12",
@@ -89,12 +96,5 @@
     "amount": 850,
     "category": "Bills",
     "date": "2026-09-01"
-  },
-  {
-    "id": "c773b919-7b9f-44e8-a592-f90a551cddc7",
-    "title": "Concert",
-    "amount": 602.9,
-    "category": "Fun",
-    "date": "2026-10-29"
   }
 ]

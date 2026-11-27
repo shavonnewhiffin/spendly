@@ -680,17 +680,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .change.up::before {
-  content: "â†‘";
+  content: "\2191"; /* ↑ */
 }
 
-/* The little plum "â†“" pill */
+/* The little plum "↓" pill */
 .change.down {
   color: #ede7ff;
   background: var(--plum);
 }
 
 .change.down::before {
-  content: "â†“";
+  content: "\2193"; /* ↓ */
 }
 
 .report-table {
