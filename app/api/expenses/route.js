@@ -1,4 +1,5 @@
 import { getExpenses, createExpense } from "@/lib/expenses";
+import { validateExpense } from "@/lib/validate";
 
 export async function GET(){
     const expenses = await getExpenses();
@@ -6,7 +7,18 @@ export async function GET(){
 }
 
 export async function POST(request){
-    const data = await request.json();
+    let data;
+    try {
+        data = await request.json();
+    } catch {
+        return Response.json({ error: "Invalid request body" }, { status: 400 })
+    }
+
+    const error = validateExpense(data);
+    if(error){
+        return Response.json({ error }, { status: 400 })
+    }
+
     const expense = await createExpense(data);
-    return Response.json(expense)
+    return Response.json(expense, { status: 201 })
 }

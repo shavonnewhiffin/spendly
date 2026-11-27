@@ -10,29 +10,52 @@ export default function ExpenseForm() {
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState(CATEGORIES[0]);
-    const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+    const [date, setDate] = useState(todayLocal());
+    const [error, setError] = useState("");
+    const [saving, setSaving] = useState(false);
+
 
     async function handleSubmit(e) {
         e.preventDefault();
-        await fetch("/api/expenses", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, amount, category, date })
-        });
-        router.push("/");
+        setError("");
+        setSaving(true);
+
+        try {
+            const response = await fetch("/api/expenses", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, amount: Number(amount), category, date })
+            });
+
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}));
+                setError(data.error ?? "Something went wrong. Please try again.");
+                return;
+            }
+
+            router.push("/");
+            router.refresh();
+        } catch {
+            setError("Couldn't reach the server. Please try again.");
+        } finally {
+            setSaving(false);
+        }
     }
 
     return (
         <form onSubmit={handleSubmit} className="card form">
+            {error && <p className="error" role="alert">{error}</p>}
             <label>
                 Title
-                <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Groceries" />
+                <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Groceries" required />
             </label>
             <label>
                 Amount ($)
                 <input
                     type="number"
                     step="0.01"
+                    min="0.01"
+                    required
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="$25.00"
@@ -48,12 +71,22 @@ export default function ExpenseForm() {
             </label>
             <label>
                 Date
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             </label>
+
             <div className="form-actions">
-            <button type="submit" className="button">Add Expense</button>
+            <button type="submit" className="button" disabled={saving}>
+                {saving ? "Saving…" : "Add Expense"}
+            </button>
             <Link href="/">Cancel</Link>
             </div>
         </form>
     )
+}
+
+
+// Today's date as YYYY-MM-DD in the user's local time zone (toISOString uses UTC)
+function todayLocal() {
+    const now = new Date();
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split("T")[0];
 }

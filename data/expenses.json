@@ -1,5 +1,33 @@
 [
   {
+    "id": "1417ad91-cab8-4863-bfe7-599978aea585",
+    "title": "New shoes",
+    "amount": 25,
+    "category": "Shopping",
+    "date": "2026-11-26"
+  },
+  {
+    "id": "f2fc7d10-e788-4fe9-b1ec-8ba37c911bfc",
+    "title": "Coffee",
+    "amount": 4.5,
+    "category": "Food",
+    "date": "2026-11-22"
+  },
+  {
+    "id": "875fec31-1e3d-4247-a717-144a544a701e",
+    "title": "Test",
+    "amount": 1,
+    "category": "Food",
+    "date": "2026-11-22"
+  },
+  {
+    "id": "aee0ee54-21e6-4d72-9124-4b65365f690e",
+    "title": "Yoga",
+    "amount": 1,
+    "category": "Other",
+    "date": "2026-11-22"
+  },
+  {
     "id": "1",
     "title": "Weekly Groceries",
     "amount": 64.2,
@@ -19,12 +47,5 @@
     "amount": 850,
     "category": "Bills",
     "date": "2026-10-01"
-  },
-  {
-    "id": "f2fc7d10-e788-4fe9-b1ec-8ba37c911bfc",
-    "title": "Coffee",
-    "amount": 4.5,
-    "category": "Food",
-    "date": "2026-11-22"
   }
 ]
